@@ -128,14 +128,17 @@
 .section-heading h2 {
   margin: 0;
   color: #17372a;
-  font-family: Georgia, 'Times New Roman', serif;
-  line-height: 1.02;
+  font-family: Inter, 'Segoe UI', Arial, sans-serif;
+  font-weight: 900;
+  line-height: 1.08;
   letter-spacing: 0;
+  overflow-wrap: normal;
+  word-break: normal;
 }
 
 .hero-copy h1 {
-  max-width: 780px;
-  font-size: clamp(2.5rem, 5.2vw, 5.9rem);
+  max-width: 720px;
+  font-size: clamp(2.3rem, 4.35vw, 4.75rem);
 }
 
 .hero-text,
@@ -260,7 +263,7 @@
 
 .section-block h2,
 .section-heading h2 {
-  font-size: clamp(2rem, 3.2vw, 3.7rem);
+  font-size: clamp(1.9rem, 2.75vw, 3.15rem);
 }
 
 .product-grid {
