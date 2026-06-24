@@ -1,93 +1,117 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import './App.css'
+import wellnessShelf from './assets/wellness-shelf.png'
+
+const facebookUrl = 'https://www.facebook.com/thuthao.truong.927'
 
 const products = [
   {
     id: 1,
-    name: 'DHA Gold Mama',
-    badge: 'Ban chay',
+    name: 'DHA cho học sinh',
+    category: 'Tập trung mỗi ngày',
     price: 690000,
-    summary: 'Ho tro bo sung DHA cho me bau va me sau sinh.',
-    benefits: ['De uong moi ngay', 'Hop 30 vien', 'Phu hop lieu trinh 1 thang'],
+    accent: 'green',
+    summary:
+      'Bổ sung DHA hằng ngày cho bé trong giai đoạn học tập, cần đọc, viết và ghi nhớ tốt hơn.',
+    details: ['Tư vấn theo độ tuổi', 'Dễ thêm vào thói quen sáng', 'Có ưu đãi mua 4 tặng 1'],
   },
   {
     id: 2,
-    name: 'Slim Balance Tea',
-    badge: 'Tu van nhieu',
-    price: 420000,
-    summary: 'Tra thao moc ho tro giu dang va giam cam giac day bung.',
-    benefits: ['Thao moc thanh', 'De ket hop an kieng', 'Goi 20 tui loc'],
+    name: 'Bộ 3 tuần hoàn não',
+    category: 'Người lớn 30+',
+    price: 780000,
+    accent: 'blue',
+    summary:
+      'Kết hợp nhóm dưỡng chất hỗ trợ lưu thông vi mạch, giảm cảm giác mệt đầu và thiếu tập trung.',
+    details: ['Có Ginkgo biloba', 'Phù hợp người làm việc căng', 'Dùng theo liệu trình'],
   },
   {
     id: 3,
-    name: 'Brain Circulation Plus',
-    badge: 'Danh cho 30+',
-    price: 780000,
-    summary: 'Ho tro tuan hoan nao, giam cam giac met moi va kho tap trung.',
-    benefits: ['Dung theo lieu trinh', 'Hop 60 vien', 'Phu hop nguoi lam viec cang thang'],
+    name: 'Dưỡng tỳ vị cho bé',
+    category: 'Ăn ngon, hấp thu',
+    price: 520000,
+    accent: 'coral',
+    summary:
+      'Gợi ý cho bé biếng ăn, hấp thu kém hoặc cần một lịch chăm sóc tiêu hóa nhẹ nhàng hơn.',
+    details: ['Hỏi kỹ tình trạng bé', 'Theo dõi sau 2 tuần', 'Không ép mua nếu chưa hợp'],
+  },
+  {
+    id: 4,
+    name: 'Thải độc gan dạng viên',
+    category: 'Gan và chuyển hóa',
+    price: 480000,
+    accent: 'gold',
+    summary:
+      'Dành cho người cần chăm sóc gan, nóng trong hoặc muốn chọn sản phẩm có hoạt chất rõ ràng.',
+    details: ['Tư vấn theo sinh hoạt', 'Không thay thuốc điều trị', 'Ưu tiên hoạt chất và hàm lượng'],
+  },
+  {
+    id: 5,
+    name: 'Hỗ trợ kiểm soát cân nặng',
+    category: 'Không giảm cân thần tốc',
+    price: 590000,
+    accent: 'mint',
+    summary:
+      'Tập trung ổn định thói quen ăn uống, đường huyết và hạn chế tích mỡ theo hướng bền vững.',
+    details: ['Không hứa giảm nhanh', 'Kèm checklist ăn uống', 'Cần kiên trì theo lịch'],
+  },
+  {
+    id: 6,
+    name: 'Canxi và xương khớp',
+    category: 'Gia đình, người lớn tuổi',
+    price: 640000,
+    accent: 'lavender',
+    summary:
+      'Gợi ý khi bổ sung canxi thường xuyên nhưng vẫn cần xem lại khả năng hấp thu và thói quen dùng.',
+    details: ['Hỏi lịch dùng hiện tại', 'Phù hợp chăm sóc dài hạn', 'Tư vấn theo nhu cầu thật'],
   },
 ]
 
 const bundles = [
   {
-    title: 'Combo me bau',
-    price: '1.190.000d',
-    items: 'DHA + vitamin tong hop + huong dan su dung 4 tuan',
+    title: 'Combo bé học tốt',
+    note: 'DHA + lịch dùng 4 tuần + nhắc lịch tái tư vấn',
+    price: 'Tư vấn theo tuổi',
   },
   {
-    title: 'Combo dep dang',
-    price: '760.000d',
-    items: 'Tra thao moc + che do an uong + checklist uong nuoc',
+    title: 'Combo ba mẹ 30+',
+    note: 'Tuần hoàn não + xương khớp + hướng dẫn dùng theo buổi',
+    price: 'Chọn theo tình trạng',
   },
   {
-    title: 'Combo cham soc bo me',
-    price: '1.450.000d',
-    items: 'San pham ho tro xuong khop + tuan hoan + lich theo doi',
+    title: 'Combo tiêu hóa cho bé',
+    note: 'Dưỡng tỳ vị + checklist ăn uống + theo dõi phản hồi',
+    price: 'Inbox để lọc nhu cầu',
   },
 ]
 
-const highlights = [
-  'Noi dung se duoc chuyen tu Facebook sang website de khach xem de hon',
-  'Co the chot don tren web thay vi chi inbox Facebook',
-  'San sang de noi cong thanh toan online o buoc tiep theo',
-  'Co khu vuc chatbot de tu van, loc nhu cau va de lai so dien thoai',
-]
-
-const testimonials = [
-  {
-    name: 'Chi Hanh, Q.7',
-    quote: 'Xem web de hon Facebook, tim dung san pham nhanh hon va dat combo cung gon.',
-  },
-  {
-    name: 'Em Tram, Thu Duc',
-    quote: 'Phan FAQ va cach dung rat huu ich, chat hoi la duoc tu van ngay.',
-  },
-  {
-    name: 'Co Mai, Bien Hoa',
-    quote: 'Dat hang nhanh, khong bi troi tin nhan nhu luc hoi qua Messenger.',
-  },
+const promises = [
+  'Không bán theo kiểu thần thánh hóa sản phẩm',
+  'Không cam kết 100%, không nói dùng là hết bệnh',
+  'Tư vấn trước khi chốt, ai chưa phù hợp thì chưa cần mua',
+  'Ưu tiên hoạt chất, hàm lượng và cách dùng rõ ràng',
 ]
 
 const faqs = [
   {
-    question: 'Website nay da thanh toan online chua?',
+    question: 'Sản phẩm có thay thuốc điều trị không?',
     answer:
-      'Ban scaffold hien tai da co san khu vuc checkout va cart demo. Buoc tiep theo minh se noi cong thanh toan nhu VNPay, MoMo hoac ZaloPay.',
+      'Không. Đây là nhóm sản phẩm hỗ trợ và bổ sung. Nếu đang điều trị bệnh, khách nên hỏi bác sĩ và gửi tình trạng thật để được tư vấn cẩn thận hơn.',
   },
   {
-    question: 'Chatbot se tra loi duoc gi?',
+    question: 'Muốn mua thì làm sao?',
     answer:
-      'Chatbot co the tra loi FAQ, goi y san pham theo nhu cau, huong dan dat hang va thu thong tin khach de ban tu van tiep.',
+      'Bấm nút inbox Facebook, gửi tuổi, nhu cầu, tình trạng hiện tại và sản phẩm đang quan tâm. Chị Thảo sẽ lọc nhu cầu trước khi chốt đơn.',
   },
   {
-    question: 'Noi dung Facebook dua vao website bang cach nao?',
+    question: 'Có thanh toán online chưa?',
     answer:
-      'Minh se chon bai viet, feedback, anh san pham va cac cau hoi thuong gap de dua thanh noi dung co cau truc, de doc va de chot don hon.',
+      'Bản web này đang ưu tiên giới thiệu sản phẩm và kéo khách về inbox. Checkout, thanh toán MoMo/VNPay và quản lý đơn hàng có thể làm ở bước tiếp theo.',
   },
 ]
 
 function formatPrice(value) {
-  return new Intl.NumberFormat('vi-VN').format(value) + 'd'
+  return new Intl.NumberFormat('vi-VN').format(value) + 'đ'
 }
 
 function App() {
@@ -97,6 +121,11 @@ function App() {
   const cartTotal = cart.reduce(
     (total, item) => total + item.price * item.quantity,
     0,
+  )
+
+  const selectedNames = useMemo(
+    () => cart.map((item) => `${item.name} x${item.quantity}`).join(', '),
+    [cart],
   )
 
   function addToCart(product) {
@@ -114,159 +143,152 @@ function App() {
     })
   }
 
+  const inboxMessage =
+    selectedNames.length > 0
+      ? `Chị Thảo ơi, em muốn tư vấn: ${selectedNames}`
+      : 'Chị Thảo ơi, em muốn được tư vấn sản phẩm phù hợp.'
+
   return (
     <div className="site-shell">
       <header className="topbar">
-        <div>
-          <p className="brand-kicker">Web Chi Thao</p>
-          <strong className="brand-name">Thuc pham bo sung va cham soc gia dinh</strong>
-        </div>
-        <nav className="topnav">
-          <a href="#products">San pham</a>
+        <a className="brand" href="#home" aria-label="Về đầu trang">
+          <span>Thu Thảo</span>
+          <strong>Wellness Shop</strong>
+        </a>
+        <nav className="topnav" aria-label="Điều hướng chính">
+          <a href="#products">Sản phẩm</a>
           <a href="#bundles">Combo</a>
+          <a href="#consult">Tư vấn</a>
           <a href="#faq">FAQ</a>
-          <a href="#chatbot">Chatbot</a>
         </nav>
+        <a className="nav-cta" href={facebookUrl} target="_blank" rel="noreferrer">
+          Inbox Facebook
+        </a>
       </header>
 
-      <main>
-        <section className="hero-panel">
+      <main id="home">
+        <section className="hero-section">
           <div className="hero-copy">
-            <p className="eyebrow">Tu noi dung Facebook sang website ban hang chuyen nghiep</p>
-            <h1>Khung website moi cho chi Thao de ban hang, cham soc khach va chot don ngay tren web.</h1>
+            <p className="eyebrow">12 năm bán hàng bằng tư vấn thật</p>
+            <h1>Chọn sản phẩm bổ sung theo đúng nhu cầu, không chạy theo lời hứa thần tốc.</h1>
             <p className="hero-text">
-              Day la scaffold moi, khong lien quan VanThinh hay NTS. Muc tieu la
-              bien noi dung tu Facebook thanh mot website gon, de tin, de chot
-              don va san sang cho thanh toan online.
+              Website gom lại các nhóm sản phẩm chị Thảo hay tư vấn trên Facebook:
+              DHA, dưỡng tỳ vị, tuần hoàn não, gan, cân nặng và xương khớp.
+              Khách đọc nhanh hơn, chọn đúng hơn và inbox để được lọc nhu cầu trước khi mua.
             </p>
             <div className="hero-actions">
               <a className="btn btn-primary" href="#products">
-                Xem san pham mau
+                Xem sản phẩm
               </a>
-              <a className="btn btn-secondary" href="#chatbot">
-                Xem khu chatbot
+              <a className="btn btn-secondary" href={facebookUrl} target="_blank" rel="noreferrer">
+                Nhắn chị Thảo
               </a>
             </div>
-            <ul className="hero-points">
-              {highlights.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
           </div>
-
-          <aside className="hero-card">
-            <p className="mini-label">Gio hang demo</p>
-            <div className="cart-metric">
-              <strong>{cartCount}</strong>
-              <span>san pham trong gio</span>
+          <div className="hero-media" aria-label="Các sản phẩm bổ sung sức khỏe">
+            <img src={wellnessShelf} alt="Kệ sản phẩm bổ sung sức khỏe" />
+            <div className="floating-card">
+              <span>Giỏ tư vấn</span>
+              <strong>{cartCount} sản phẩm</strong>
+              <p>{cartTotal > 0 ? formatPrice(cartTotal) : 'Chọn sản phẩm để hỏi thêm'}</p>
             </div>
-            <div className="cart-metric">
-              <strong>{formatPrice(cartTotal)}</strong>
-              <span>tam tinh don hang</span>
-            </div>
-            <div className="checkout-preview">
-              <p>Buoc checkout se noi tiep:</p>
-              <ul>
-                <li>Thong tin nguoi mua</li>
-                <li>Dia chi giao hang</li>
-                <li>Thanh toan online</li>
-              </ul>
-            </div>
-          </aside>
+          </div>
         </section>
 
-        <section className="section-grid" id="products">
-          <div className="section-heading">
-            <p className="eyebrow">San pham noi bat</p>
-            <h2>Card san pham da san sang cho trang shop</h2>
-          </div>
+        <section className="trust-band" id="consult">
+          {promises.map((item) => (
+            <article key={item}>
+              <span aria-hidden="true">✓</span>
+              <p>{item}</p>
+            </article>
+          ))}
+        </section>
 
+        <section className="section-block" id="products">
+          <div className="section-heading">
+            <p className="eyebrow">Nhóm sản phẩm đang tư vấn</p>
+            <h2>Khách chọn theo nhu cầu, chị Thảo lọc lại trước khi chốt.</h2>
+          </div>
           <div className="product-grid">
             {products.map((product) => (
-              <article className="product-card" key={product.id}>
-                <span className="product-badge">{product.badge}</span>
-                <div className="product-visual">
-                  <span>{product.name.slice(0, 1)}</span>
+              <article className={`product-card ${product.accent}`} key={product.id}>
+                <div className="product-topline">
+                  <span>{product.category}</span>
+                  <strong>{formatPrice(product.price)}</strong>
+                </div>
+                <div className="product-pack" aria-hidden="true">
+                  <span>{product.name.split(' ')[0]}</span>
                 </div>
                 <h3>{product.name}</h3>
                 <p>{product.summary}</p>
-                <ul className="benefit-list">
-                  {product.benefits.map((benefit) => (
-                    <li key={benefit}>{benefit}</li>
+                <ul>
+                  {product.details.map((detail) => (
+                    <li key={detail}>{detail}</li>
                   ))}
                 </ul>
-                <div className="product-footer">
-                  <strong>{formatPrice(product.price)}</strong>
-                  <button
-                    type="button"
-                    className="btn btn-primary"
-                    onClick={() => addToCart(product)}
-                  >
-                    Them vao gio
-                  </button>
-                </div>
+                <button className="btn btn-card" type="button" onClick={() => addToCart(product)}>
+                  Thêm vào giỏ tư vấn
+                </button>
               </article>
             ))}
           </div>
         </section>
 
-        <section className="section-grid accent-panel" id="bundles">
-          <div className="section-heading">
-            <p className="eyebrow">Combo de chot don nhanh</p>
-            <h2>Khach tu Facebook rat hop dang mua theo combo</h2>
+        <section className="section-block split-section" id="bundles">
+          <div>
+            <p className="eyebrow">Combo dễ hỏi, dễ theo dõi</p>
+            <h2>Không ép mua nhiều, chỉ gom đúng nhóm nhu cầu.</h2>
+            <p className="section-copy">
+              Các combo dưới đây là khung tư vấn. Khi khách inbox, chị Thảo vẫn
+              hỏi tuổi, tình trạng, thói quen dùng và mục tiêu để chọn lại cho phù hợp.
+            </p>
           </div>
-          <div className="bundle-grid">
+          <div className="bundle-list">
             {bundles.map((bundle) => (
               <article className="bundle-card" key={bundle.title}>
+                <span>{bundle.price}</span>
                 <h3>{bundle.title}</h3>
-                <strong>{bundle.price}</strong>
-                <p>{bundle.items}</p>
+                <p>{bundle.note}</p>
               </article>
             ))}
           </div>
         </section>
 
-        <section className="section-grid split-layout">
-          <div className="content-card">
-            <p className="eyebrow">Social proof</p>
-            <h2>Feedback se duoc tach tu bai dang Facebook</h2>
-            <div className="quote-list">
-              {testimonials.map((item) => (
-                <blockquote className="quote-card" key={item.name}>
-                  <p>"{item.quote}"</p>
-                  <footer>{item.name}</footer>
-                </blockquote>
-              ))}
+        <section className="section-block consult-panel">
+          <div>
+            <p className="eyebrow">Luồng chốt đơn hiện tại</p>
+            <h2>Website giới thiệu rõ, Facebook dùng để tư vấn và chốt đơn.</h2>
+          </div>
+          <div className="checkout-box">
+            <div>
+              <span>1</span>
+              <p>Khách chọn nhóm sản phẩm hoặc combo đang quan tâm.</p>
+            </div>
+            <div>
+              <span>2</span>
+              <p>Inbox Facebook kèm tuổi, nhu cầu và tình trạng hiện tại.</p>
+            </div>
+            <div>
+              <span>3</span>
+              <p>Chị Thảo tư vấn lại, xác nhận đơn và hướng dẫn dùng.</p>
             </div>
           </div>
-
-          <div className="content-card" id="chatbot">
-            <p className="eyebrow">Khu chatbot</p>
-            <h2>Vi tri san sang de gan chatbot tu van khach hang</h2>
-            <div className="chatbot-card">
-              <div className="chat-row">
-                <span className="bot">Bot</span>
-                <p>Chi dang quan tam van de nao: me bau, giam can hay suc khoe 30+?</p>
-              </div>
-              <div className="chat-row user-row">
-                <span className="user">Khach</span>
-                <p>Minh muon tim san pham cho me bau.</p>
-              </div>
-              <div className="chat-row">
-                <span className="bot">Bot</span>
-                <p>Em goi y combo me bau va xin so dien thoai de chi Thao tu van them.</p>
-              </div>
-            </div>
-          </div>
+          <a
+            className="btn btn-primary wide-cta"
+            href={`${facebookUrl}?sk=about`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Mở Facebook chị Thảo
+          </a>
         </section>
 
-        <section className="section-grid" id="faq">
+        <section className="section-block faq-section" id="faq">
           <div className="section-heading">
-            <p className="eyebrow">FAQ</p>
-            <h2>Nhung cau hoi de chot don se dua len website thay vi troi trong inbox</h2>
+            <p className="eyebrow">Câu hỏi thường gặp</p>
+            <h2>Nói rõ trước để khách tin và hỏi đúng vấn đề.</h2>
           </div>
-
-          <div className="faq-list">
+          <div className="faq-grid">
             {faqs.map((item) => (
               <article className="faq-card" key={item.question}>
                 <h3>{item.question}</h3>
@@ -279,11 +301,19 @@ function App() {
 
       <footer className="footer-bar">
         <div>
-          <strong>Scaffold website chi Thao</strong>
-          <p>Buoc tiep theo: tach noi dung tu Facebook, them backend don hang, thanh toan online va chatbot that.</p>
+          <strong>Thu Thảo Wellness Shop</strong>
+          <p>
+            Sản phẩm bổ sung không thay thế thuốc chữa bệnh. Nội dung trên web
+            dùng để tham khảo và cần tư vấn theo tình trạng từng người.
+          </p>
         </div>
-        <a className="btn btn-primary" href="#products">
-          Tiep tuc xay dung
+        <a
+          className="btn btn-secondary"
+          href={`${facebookUrl}?text=${encodeURIComponent(inboxMessage)}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          Gửi nhu cầu tư vấn
         </a>
       </footer>
     </div>
