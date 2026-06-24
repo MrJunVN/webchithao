@@ -3,6 +3,7 @@ import './App.css'
 import wellnessShelf from './assets/wellness-shelf.png'
 
 const facebookUrl = 'https://www.facebook.com/thuthao.truong.927'
+const groupUrl = 'https://www.facebook.com/groups/819004024935136/'
 
 const products = [
   {
@@ -37,13 +38,13 @@ const products = [
   },
   {
     id: 4,
-    name: 'Thải độc gan dạng viên',
+    name: 'Gan khỏe, người nhẹ',
     category: 'Gan và chuyển hóa',
     price: 480000,
     accent: 'gold',
     summary:
-      'Dành cho người cần chăm sóc gan, nóng trong hoặc muốn chọn sản phẩm có hoạt chất rõ ràng.',
-    details: ['Tư vấn theo sinh hoạt', 'Không thay thuốc điều trị', 'Ưu tiên hoạt chất và hàm lượng'],
+      'Nhóm sản phẩm được khách trong group hỏi nhiều khi cần chăm sóc gan, nóng trong hoặc muốn chọn dạng viên dễ dùng.',
+    details: ['Có lựa chọn dạng viên', 'Không thay thuốc điều trị', 'Tư vấn theo sinh hoạt'],
   },
   {
     id: 5,
@@ -57,20 +58,35 @@ const products = [
   },
   {
     id: 6,
-    name: 'Canxi và xương khớp',
-    category: 'Gia đình, người lớn tuổi',
+    name: 'Canxi tuổi 8-12',
+    category: 'Giai đoạn xương phát triển',
     price: 640000,
     accent: 'lavender',
     summary:
-      'Gợi ý khi bổ sung canxi thường xuyên nhưng vẫn cần xem lại khả năng hấp thu và thói quen dùng.',
-    details: ['Hỏi lịch dùng hiện tại', 'Phù hợp chăm sóc dài hạn', 'Tư vấn theo nhu cầu thật'],
+      'Gợi ý cho giai đoạn trẻ cần nhiều canxi để hỗ trợ phát triển chiều cao và nền xương chắc hơn.',
+    details: ['Hỏi chiều cao, cân nặng', 'Tư vấn lịch dùng', 'Phối hợp vận động và ngủ đủ'],
+  },
+]
+
+const communityTopics = [
+  {
+    title: 'Chăm sóc sức khỏe chủ động',
+    text: 'Group chia sẻ kiến thức để khách hiểu nhu cầu cơ thể trước khi chọn sản phẩm.',
+  },
+  {
+    title: 'Sản phẩm khoa học Việt Nam',
+    text: 'Ưu tiên sản phẩm có nguồn gốc rõ, hoạt chất rõ và cách dùng dễ theo dõi.',
+  },
+  {
+    title: 'Tư vấn theo tình trạng thật',
+    text: 'Khách được hỏi tuổi, thói quen, mục tiêu và sản phẩm đang dùng trước khi chốt.',
   },
 ]
 
 const bundles = [
   {
     title: 'Combo bé học tốt',
-    note: 'DHA + lịch dùng 4 tuần + nhắc lịch tái tư vấn',
+    note: 'DHA + canxi theo tuổi + lịch dùng 4 tuần + nhắc lịch tái tư vấn',
     price: 'Tư vấn theo tuổi',
   },
   {
@@ -79,8 +95,8 @@ const bundles = [
     price: 'Chọn theo tình trạng',
   },
   {
-    title: 'Combo tiêu hóa cho bé',
-    note: 'Dưỡng tỳ vị + checklist ăn uống + theo dõi phản hồi',
+    title: 'Combo gan và chuyển hóa',
+    note: 'Sản phẩm hỗ trợ gan dạng viên + checklist sinh hoạt nhẹ nhàng hơn',
     price: 'Inbox để lọc nhu cầu',
   },
 ]
@@ -94,7 +110,7 @@ const promises = [
 
 const faqs = [
   {
-    question: 'Sản phẩm có thay thuốc điều trị không?',
+    question: 'Sản phẩm trong group có thay thuốc điều trị không?',
     answer:
       'Không. Đây là nhóm sản phẩm hỗ trợ và bổ sung. Nếu đang điều trị bệnh, khách nên hỏi bác sĩ và gửi tình trạng thật để được tư vấn cẩn thận hơn.',
   },
@@ -104,9 +120,9 @@ const faqs = [
       'Bấm nút inbox Facebook, gửi tuổi, nhu cầu, tình trạng hiện tại và sản phẩm đang quan tâm. Chị Thảo sẽ lọc nhu cầu trước khi chốt đơn.',
   },
   {
-    question: 'Có thanh toán online chưa?',
+    question: 'Group dùng để làm gì?',
     answer:
-      'Bản web này đang ưu tiên giới thiệu sản phẩm và kéo khách về inbox. Checkout, thanh toán MoMo/VNPay và quản lý đơn hàng có thể làm ở bước tiếp theo.',
+      'Group “Yêu Sản Phẩm Khoa Học Việt Nam” là nơi gom bài chia sẻ, câu hỏi khách hàng và nội dung chăm sóc sức khỏe chủ động để khách đọc trước khi inbox.',
   },
 ]
 
@@ -157,8 +173,8 @@ function App() {
         </a>
         <nav className="topnav" aria-label="Điều hướng chính">
           <a href="#products">Sản phẩm</a>
+          <a href="#community">Group</a>
           <a href="#bundles">Combo</a>
-          <a href="#consult">Tư vấn</a>
           <a href="#faq">FAQ</a>
         </nav>
         <a className="nav-cta" href={facebookUrl} target="_blank" rel="noreferrer">
@@ -169,19 +185,19 @@ function App() {
       <main id="home">
         <section className="hero-section">
           <div className="hero-copy">
-            <p className="eyebrow">12 năm bán hàng bằng tư vấn thật</p>
+            <p className="eyebrow">Từ group Yêu Sản Phẩm Khoa Học Việt Nam</p>
             <h1>Chọn sản phẩm bổ sung theo đúng nhu cầu, không chạy theo lời hứa thần tốc.</h1>
             <p className="hero-text">
-              Website gom lại các nhóm sản phẩm chị Thảo hay tư vấn trên Facebook:
-              DHA, dưỡng tỳ vị, tuần hoàn não, gan, cân nặng và xương khớp.
+              Website gom lại các nhóm sản phẩm chị Thảo hay tư vấn trên Facebook và trong group:
+              DHA, canxi tuổi 8-12, dưỡng tỳ vị, tuần hoàn não, gan, cân nặng và xương khớp.
               Khách đọc nhanh hơn, chọn đúng hơn và inbox để được lọc nhu cầu trước khi mua.
             </p>
             <div className="hero-actions">
               <a className="btn btn-primary" href="#products">
                 Xem sản phẩm
               </a>
-              <a className="btn btn-secondary" href={facebookUrl} target="_blank" rel="noreferrer">
-                Nhắn chị Thảo
+              <a className="btn btn-secondary" href={groupUrl} target="_blank" rel="noreferrer">
+                Vào group
               </a>
             </div>
           </div>
@@ -202,6 +218,33 @@ function App() {
               <p>{item}</p>
             </article>
           ))}
+        </section>
+
+        <section className="section-block community-panel" id="community">
+          <div>
+            <p className="eyebrow">Cộng đồng 2,6K thành viên</p>
+            <h2>Yêu Sản Phẩm Khoa Học Việt Nam</h2>
+            <p className="section-copy">
+              Đây là nhóm riêng tư do chị Thảo quản trị, tập trung vào chăm sóc sức khỏe chủ động,
+              câu hỏi thực tế của khách và cách dùng sản phẩm rõ ràng hơn trước khi mua.
+            </p>
+            <div className="hero-actions">
+              <a className="btn btn-primary" href={groupUrl} target="_blank" rel="noreferrer">
+                Mở group Facebook
+              </a>
+              <a className="btn btn-secondary" href={facebookUrl} target="_blank" rel="noreferrer">
+                Nhắn chị Thảo
+              </a>
+            </div>
+          </div>
+          <div className="community-grid">
+            {communityTopics.map((topic) => (
+              <article key={topic.title}>
+                <h3>{topic.title}</h3>
+                <p>{topic.text}</p>
+              </article>
+            ))}
+          </div>
         </section>
 
         <section className="section-block" id="products">
